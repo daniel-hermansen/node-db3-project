@@ -2,6 +2,15 @@ const knex = require('knex')
 const config = require('../knexfile.js')
 const db = knex(config.development)
 
+module.exports = {
+    find,
+    findById,
+    findSteps,
+    add,
+    update,
+    remove,
+};
+
 function find() {
     return db('schemes');
 }
@@ -11,10 +20,11 @@ function findById(id) {
 }
 
 function findSteps(id) {
-    return db('schemes')
-        .join('steps')
-        .select('schemes.id as schemesId', 'schemes.scheme_name', 'steps.step_number', 'steps.step_number', 'steps.instructions')
-        .where({ schemesId: id });
+    return db('steps')
+        // .join('steps')
+        // .select('schemes.id as schemesId', 'schemes.scheme_name', 'steps.step_number', 'steps.step_number', 'steps.instructions')
+        .where({ scheme_id: id })
+        .orderBy('step_number');
 }
 
 function add(scheme) {
@@ -35,11 +45,3 @@ function remove(id) {
         .del();
 }
 
-module.exports = {
-    find,
-    findById,
-    findSteps,
-    add,
-    update,
-    remove,
-};
